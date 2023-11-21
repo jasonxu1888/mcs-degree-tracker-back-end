@@ -1,0 +1,8 @@
+{
+"id":"123",
+"name": "Machine Learning",
+"category": "Computer Science",
+"credit": 4,
+"prerequisites":["121", "122"],
+"offeredTerms": ["fall","spring"]
+}

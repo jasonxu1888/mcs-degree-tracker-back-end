@@ -1,0 +1,21 @@
+{
+"id":"mcs001",
+"catalogYearStart": 2020,
+"catalogYearEnd": 2025,
+"programId": "MCS",
+"programName": "Masters in Computer Science",
+"field": "Engineering",
+"college": "Grainger",
+"minCredit": 20,
+"maxTransfer": 12,
+"maxCredit": 32,
+"minTermCredit": 8,
+"maxTermCredit": 12,
+/*
+ one in array is sufficient.
+*/
+"requiredCourses": [
+    ["123"],  ["121", "124", "125"]
+]
+   
+}
