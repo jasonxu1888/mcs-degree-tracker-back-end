@@ -1,0 +1,56 @@
+const user = require("../models/user.js");
+
+//GET '/user'
+const getAllUser = async (req, res, next) => {
+    out = await user.find();
+    console.log("inside get all users" + out);
+
+    res.status(200).json({message:"OK",data:out});
+};
+
+//POST '/user'
+const newUser = (req, res, next) => {
+    res.json({message: "POST new user"});
+};
+
+//DELETE '/user'
+const deleteAllUser = (req, res, next) => {
+    res.json({message: "DELETE all user"});
+};
+
+//GET '/user/:name'
+// always the parameter is "name" for get after url
+// /user/123 will have req.params.name = 123
+const getOneUser = async (req, res, next) => {
+    var id = req.params.name;
+    try {
+        out = await user.find({id:id});
+        res.status(200).json({message:"OK",data:out});
+    } catch (error) {
+        res.status(404).json({message:"USER NOT FOUND"});
+    }
+};
+
+//POST '/user/validate'
+//get the id and password. Validate if password is correct.
+const validate = (req, res, next) => {
+    var id = req.body.id;
+    var password = req.body.password;
+    console.log("id:" + id + ", password" + "not a good practice to print...");
+    res.json({message: "POST 1 user comment"});
+};
+
+//DELETE '/user/:name'
+const deleteOneUser = (req, res, next) => {
+    res.json({message: "DELETE 1 user"});
+};
+
+//export controller functions
+module.exports = {
+    getAllUser, 
+    newUser,
+    deleteAllUser,
+    getOneUser,
+    validate,
+    deleteOneUser
+};

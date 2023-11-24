@@ -1,0 +1,28 @@
+{
+  "name": "proj-409",
+  "version": "1.0.0",
+  "description": "MP3 Starter for CS498RK Spring 2019",
+  "authors": [
+    "Raki Jeyaraman <rsj3@illinois.edu>",
+    "Jason  <jason@illinois.edu>"
+  ],
+  "scripts": {
+    "start": "nodemon --exec node server.js"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rsj3uiuc/cs409finalproject"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.18.2",
+    "mongoose": "^5.13.21",
+    "nodemon": "^1.11.0"
+  }
+}

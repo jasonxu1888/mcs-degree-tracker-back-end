@@ -1,0 +1,30 @@
+{
+"id":"raki",
+"firstName": "Raki",
+"lastName": "Jey",
+"programYear": 2025,
+"program": "mcs001",
+"status": "active",
+"completedCourses": [
+    {
+        "courseId": "123",
+        "year":  2024,
+        "term": "fall",
+        "grade": 4
+    },
+    {
+        "courseId": "124",
+        "year":  2024,
+        "term": "fall",
+        "grade": 4
+    }
+],
+"currentCourses": [
+    {
+        "courseId": "125",
+        "year":  2025,
+        "term": "fall",
+        "grade": 4
+    }
+]
+}
