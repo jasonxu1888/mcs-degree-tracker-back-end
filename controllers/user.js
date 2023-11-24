@@ -33,11 +33,25 @@ const getOneUser = async (req, res, next) => {
 
 //POST '/user/validate'
 //get the id and password. Validate if password is correct.
-const validate = (req, res, next) => {
+const validate = async (req, res, next) => {
     var id = req.body.id;
     var password = req.body.password;
+    var validUser = false;
+    try {
+        var out = await user.findOne({id:id});
+        console.log("user entered: "+password+", actual password: "+out.password);
+        if (out.password == password) {
+            validUser = true;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    if(validUser) {
+        res.json({message:"SUCCESS"});
+    } else {
+        res.json({message:"INVALID PASSWORD"});
+    }
     console.log("id:" + id + ", password" + "not a good practice to print...");
-    res.json({message: "POST 1 user comment"});
 };
 
 //DELETE '/user/:name'

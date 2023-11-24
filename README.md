@@ -6,6 +6,7 @@
 `git clone https://gitlab.com/uiuc-web-programming/mp3.git mp3`, then `cd mp3`
 2. Install dependencies:
 `npm install`
+`npm install mongoose`
 3. Start the dev server:
 `npm start` or 
 `nodemon --exec node server.js` to automatically restart the server on save.
