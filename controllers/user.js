@@ -18,11 +18,10 @@ const deleteAllUser = (req, res, next) => {
     res.json({message: "DELETE all user"});
 };
 
-//GET '/user/:name'
-// always the parameter is "name" for get after url
-// /user/123 will have req.params.name = 123
+//GET '/user/:userid'
+// /user/123 will have req.params.id = 123
 const getOneUser = async (req, res, next) => {
-    var id = req.params.name;
+    var id = req.params.userid;
     try {
         out = await user.find({id:id});
         res.status(200).json({message:"OK",data:out});
@@ -36,22 +35,23 @@ const getOneUser = async (req, res, next) => {
 const validate = async (req, res, next) => {
     var id = req.body.id;
     var password = req.body.password;
+    console.log("id:" + id);
     var validUser = false;
     try {
-        var out = await user.findOne({id:id});
-        console.log("user entered: "+password+", actual password: "+out.password);
-        if (out.password == password) {
+        out = await user.findOne({id:id});
+        if(out.password == password){
             validUser = true;
-        }
-    } catch (error) {
+        } 
+        console.log(out);
+    } catch (error){
         console.log(error);
     }
-    if(validUser) {
-        res.json({message:"SUCCESS"});
-    } else {
-        res.json({message:"INVALID PASSWORD"});
-    }
     console.log("id:" + id + ", password" + "not a good practice to print...");
+    if(validUser){
+        res.json({message: "User gave a valid password"});
+    } else {
+        res.json({message: "Invalid Password"});
+    }
 };
 
 //DELETE '/user/:name'

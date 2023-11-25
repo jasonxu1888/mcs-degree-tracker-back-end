@@ -6,11 +6,11 @@
 `git clone https://gitlab.com/uiuc-web-programming/mp3.git mp3`, then `cd mp3`
 2. Install dependencies:
 `npm install`
-`npm install mongoose`
 3. Start the dev server:
 `npm start` or 
 `nodemon --exec node server.js` to automatically restart the server on save.
-
+4. 'npm install mongo'
+5. Update secrets.json with correct URL pointing to Mongo DB.
 
 # Mongo Collections
 # users:
@@ -27,3 +27,22 @@
     - course details, dependencies.
 
 # API details
+
+# find user login
+http://localhost:4000/user/validate
+
+post json object
+{
+    "id": "raki" ,
+    "password": "secret"
+}
+
+# student
+http://localhost:4000/student/raki
+
+# find course
+http://localhost:4000/course/123
+
+# find prequsite courses for a course.
+http://localhost:4000/course/prereqs/123
+

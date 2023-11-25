@@ -1,8 +1,53 @@
-{
-"id":"123",
-"name": "Machine Learning",
-"category": "Computer Science",
-"credit": 4,
-"prerequisites":["121", "122"],
-"offeredTerms": ["fall","spring"]
-}
+[{
+  "_id": {
+    "$oid": "65615da4e87579051bde83c0"
+  },
+  "id": "123",
+  "name": "Machine Learning",
+  "category": "Computer Science",
+  "credit": 4,
+  "offeredTerms": [
+    "fall",
+    "spring"
+  ],
+  "prereqs": [
+    "122",
+    "125"
+  ]
+},{
+  "_id": {
+    "$oid": "65615dc7e87579051bde83c2"
+  },
+  "id": "122",
+  "name": "Basic of Machine Learning",
+  "category": "Computer Science",
+  "credit": 4,
+  "offeredTerms": [
+    "fall",
+    "spring"
+  ],
+  "prereqs": [
+    "121"
+  ]
+},{
+  "_id": {
+    "$oid": "65615defe87579051bde83c4"
+  },
+  "id": "121",
+  "name": "Python Programming ",
+  "category": "Computer Science",
+  "credit": 4,
+  "offeredTerms": [
+    "fall",
+    "spring"
+  ]
+},{
+  "_id": {
+    "$oid": "6562006a36eb0064587ef5dd"
+  },
+  "id": "125",
+  "name": "Other dep",
+  "prereqs": [
+    "120"
+  ]
+}]
