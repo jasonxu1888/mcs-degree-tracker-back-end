@@ -46,3 +46,21 @@ http://localhost:4000/course/123
 # find prequsite courses for a course.
 http://localhost:4000/course/prereqs/123
 
+# find and add student info. Sample done for enrolledCourses.
+json post.
+http://localhost:4000/student/addinfo
+
+sample json
+  {
+    "id": "raki",
+    "enrolledCourses": [
+    {
+      "courseId": "3000",
+      "year": 2028,
+      "term": "fall",
+      "grade": 4
+    }
+  ]
+  }
+
+  

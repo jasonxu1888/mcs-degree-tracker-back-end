@@ -17,6 +17,7 @@ router.get('/course/prereqs/:courseid', courseController.findPrereqs);
 router.get('/course/:courseid', courseController.findCourse);
 
 router.get('/student/:studentid', studentController.findStudent);
+router.post('/student/addinfo', studentController.addInfo);
 
 module.exports = router;
 
