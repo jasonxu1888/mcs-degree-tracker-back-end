@@ -8,7 +8,7 @@ var CourseSchema = new mongoose.Schema({
     name: String,
     category: String,
     credit: {type:Number, min:1, max:5},
-    prereqs: Array,
+    detail: String,
     offeredTerms: Array
 });
 

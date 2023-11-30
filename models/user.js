@@ -6,12 +6,12 @@ var mongoose = require('mongoose');
 var UserSchema = new mongoose.Schema({
     firstname: String,
     lastname: String,
-    id: String,
-    role: String,
     email: String,
     dateCreated: Date,
-    status: String,
-    password: String
+    password: String,
+    programYear: Number,
+    program: String,
+    plannedCourses: Array
 });
 
 // Export the Mongoose model
