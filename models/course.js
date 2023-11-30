@@ -6,10 +6,11 @@ var mongoose = require('mongoose');
 var CourseSchema = new mongoose.Schema({
     id: String,
     name: String,
-    category: String,
     credit: {type:Number, min:1, max:5},
     detail: String,
-    offeredTerms: Array
+    offeredTerms: Array,
+    startTime: String,
+    endTime: String
 });
 
 // Export the Mongoose model
