@@ -1,4 +1,3 @@
-const student = require("../models/student.js");
 
 
 //get '/student/:studentid'

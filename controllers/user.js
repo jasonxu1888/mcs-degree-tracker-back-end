@@ -10,7 +10,65 @@ const getAllUser = async (req, res, next) => {
 
 //POST '/user'
 const newUser = (req, res, next) => {
-    res.json({message: "POST new user"});
+
+    if(!(req.body.email && req.body.name)){
+        res.statusCode = 400;
+        res.json({ 
+            "message": "User Not Created - Email and Name are required for User Creation",
+            "data": ""})
+        return
+    }
+
+    // try{
+    //     userJson = 
+    // }
+
+
+    // try {
+        
+    
+    //     await User.findOne({"email":req.body.email}).then( (userSameEmail)=> 
+    //     {
+    //         if (userSameEmail != null) 
+    //         {
+    //             res.statusCode = 400;
+    //             res.json({ 
+    //                 "message": "User Not Created - Email Already Linked to another User",
+    //                 "data": ""})
+    //         }
+    //         else
+    //         {
+    //             var newUser = 
+    //             {
+    //             "name":req.body.name,
+    //             "email":req.body.email
+    //             }
+    //             if(req.body.pendingTasks){
+    //                 newUser.pendingTasks = req.body.pendingTasks
+    //             }
+                
+    //             record = new User(newUser)
+    //             record.save()
+    //             .then( (savedRec) => {
+    //                 res.statusCode = 201;
+    //                 if(savedRec.pendingTasks.length > 0){
+    //                     updateTaskUser(savedRec.pendingTasks, {"assignedUser": savedRec._id, "assignedUserName":savedRec.name})
+
+    //                 }
+    //                 res.json({ 
+    //                     "message": "User Created",
+    //                     "data": savedRec})
+    //                 }))
+    
+    //         }
+    //     }))
+    // } catch (error) {
+    //     res.statusCode = 500;
+    //     res.json({ 
+    //         "message": "User Not Created - Server Error",
+    //         "data": ""})
+    // }
+    
 };
 
 //DELETE '/user'

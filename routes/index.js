@@ -6,7 +6,7 @@ const courseController = require('../controllers/course');
 const studentController = require('../controllers/student');
 
 
-router.get('/user', userController.getAllUser);
+router.get('/users', userController.getAllUser);
 router.post('/user', userController.newUser);
 router.delete('/user', userController.deleteAllUser);
 router.get('/user/:userid', userController.getOneUser);
