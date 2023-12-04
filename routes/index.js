@@ -1,24 +1,20 @@
-const express = require('express');
-const router  = express.Router();
+const express = require("express");
+const router = express.Router();
 
-const userController = require('../controllers/user');
-const courseController = require('../controllers/course');
-const studentController = require('../controllers/student');
+const userController = require("../controllers/user");
+const courseController = require("../controllers/course");
 
+// User Routes
+router.get("/users", userController.getAllUser);
+router.delete("/users/:id", userController.deleteOneUser);
+router.delete("/users", userController.deleteAllUser);
+router.post("/users", userController.createNewUser);
+router.put("/users/:id", userController.updateUser);
+router.get("/users/:id", userController.getOneUser);
 
-router.get('/users', userController.getAllUser);
-router.post('/user', userController.newUser);
-router.delete('/user', userController.deleteAllUser);
-router.get('/user/:userid', userController.getOneUser);
-router.delete('/user/:userid', userController.deleteOneUser);
-router.post('/user/validate', userController.validate);
-
-router.get('/course/prereqs/:courseid', courseController.findPrereqs);
-router.get('/course/:courseid', courseController.findCourse);
-
-router.get('/student/:studentid', studentController.findStudent);
-router.post('/student/addinfo', studentController.addInfo);
+// Course Routes
+router.get("/courses/:id", courseController.getCourse);
+router.get("/courses", courseController.getAllCourses);
+router.post("/courses/validate", courseController.validateCourseSchedule);
 
 module.exports = router;
-
-
