@@ -65,8 +65,9 @@ const deleteAllUser = async (req, res, next) => {
 //GET '/user/:userid'
 // /user/123 will have req.params.id = 123
 const getOneUser = async (req, res, next) => {
-    var id = req.params.userid;
+    var id = req.params.id;
     try {
+        console.log(id);
         out = await user.findById(id);
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
@@ -150,9 +151,10 @@ const validate = async (req, res, next) => {
 
 //DELETE '/user/:name'
 const deleteOneUser = async (req, res, next) => {
-    var id = req.params.userid;
+    var id = req.params.id;
     try {
         out = await user.deleteOne({_id:id});
+        print(out)
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
         res.status(404).json({message:"USER NOT FOUND"});

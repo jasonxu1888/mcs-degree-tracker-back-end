@@ -4,14 +4,14 @@ var mongoose = require('mongoose');
 // Define our user schema
 // no password encryption for now.
 var UserSchema = new mongoose.Schema({
-    firstname: String,
-    lastname: String,
-    email: String,
-    dateCreated: Date,
-    password: String,
-    programYear: Number,
-    program: String,
-    plannedCourses: Array
+    firstname: {type: String, required: true},
+    lastname: {type: String, required: true},
+    email: { type: String, unique: true, required: true },
+    dateCreated: { type: Date, default: Date.now },
+    password: { type: String, required: true },
+    programYear: { type: Number, required:true },
+    program: { type: String, default: "MCS" },
+    plannedCourses: { type: Array, default: []},
 });
 
 // Export the Mongoose model
