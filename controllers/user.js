@@ -4,76 +4,62 @@ const user = require("../models/user.js");
 const getAllUser = async (req, res, next) => {
     out = await user.find();
     console.log("inside get all users" + out);
-
     res.status(200).json({message:"OK",data:out});
 };
 
-//POST '/user'
-const newUser = (req, res, next) => {
-
-    if(!(req.body.email && req.body.name)){
-        res.statusCode = 400;
-        res.json({ 
-            "message": "User Not Created - Email and Name are required for User Creation",
-            "data": ""})
-        return
+function validateInputNewUser(input, err_message) {
+    try{
+        jsonbody = JSON.parse(input)
+        if(!(jsonbody.email && jsonbody.name)){
+            return [false, err_message + " - Email and Name are required for User Creation"]
+        }
+        return [true, jsonbody]
     }
+    catch(err){
+        return [false, err_message + " - Invalid JSON"]
+    }
+}
 
-    // try{
-    //     userJson = 
-    // }
-
-
-    // try {
-        
-    
-    //     await User.findOne({"email":req.body.email}).then( (userSameEmail)=> 
-    //     {
-    //         if (userSameEmail != null) 
-    //         {
-    //             res.statusCode = 400;
-    //             res.json({ 
-    //                 "message": "User Not Created - Email Already Linked to another User",
-    //                 "data": ""})
-    //         }
-    //         else
-    //         {
-    //             var newUser = 
-    //             {
-    //             "name":req.body.name,
-    //             "email":req.body.email
-    //             }
-    //             if(req.body.pendingTasks){
-    //                 newUser.pendingTasks = req.body.pendingTasks
-    //             }
-                
-    //             record = new User(newUser)
-    //             record.save()
-    //             .then( (savedRec) => {
-    //                 res.statusCode = 201;
-    //                 if(savedRec.pendingTasks.length > 0){
-    //                     updateTaskUser(savedRec.pendingTasks, {"assignedUser": savedRec._id, "assignedUserName":savedRec.name})
-
-    //                 }
-    //                 res.json({ 
-    //                     "message": "User Created",
-    //                     "data": savedRec})
-    //                 }))
-    
-    //         }
-    //     }))
-    // } catch (error) {
-    //     res.statusCode = 500;
-    //     res.json({ 
-    //         "message": "User Not Created - Server Error",
-    //         "data": ""})
-    // }
-    
+//POST '/user'
+const createNewUser = (req, res, next) => {
+    [valid, userJson] = validateInputNewUser(req.body, "User Not Created")
+    if(!valid){
+        res.statusCode = 400;
+        res.json({
+            "message": userJson,
+            "data": ""
+        })
+    }
+    else{
+        user.findOne({"email":userJson.email}).then( (userSameEmail)=> 
+        {
+            if (userSameEmail != null) 
+            {
+                res.statusCode = 400;
+                res.json({ 
+                    "message": "User Not Created - Email Already Linked to another User",
+                    "data": ""})
+            }
+            else
+            {
+                record = new User(userJson)
+                record.save()
+                .then( (savedRec) => {
+                    res.statusCode = 201;
+                    res.json({ 
+                        "message": "User Created",
+                        "data": savedRec})
+                    })
+            }
+        })
+    }    
 };
 
 //DELETE '/user'
-const deleteAllUser = (req, res, next) => {
-    res.json({message: "DELETE all user"});
+const deleteAllUser = async (req, res, next) => {
+    out = await user.deleteMany();
+    console.log("inside delete all users");
+    res.status(200).json({message:"OK",data:""});
 };
 
 //GET '/user/:userid'
@@ -81,13 +67,63 @@ const deleteAllUser = (req, res, next) => {
 const getOneUser = async (req, res, next) => {
     var id = req.params.userid;
     try {
-        out = await user.find({id:id});
+        out = await user.findById(id);
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
         res.status(404).json({message:"USER NOT FOUND"});
     }
 };
 
+const updateUser = async (req, res, next) => {
+    [valid, userJson] = validateInputNewUser(req.body, "User Not Updated")
+    id = req.params.userid
+    if(!valid){
+        res.statusCode = 400;
+        res.json({
+            "message": userJson,
+            "data": ""
+        })
+    }
+    else{
+        if(id == null){
+            res.statusCode = 400;
+            res.json({
+                "message": "User Not Updated - no id given",
+                "data": ""
+            })
+        }
+
+        user.findById(id).then( (userObj)=> 
+        {
+            if (userObj == null) 
+            {
+                res.statusCode = 400;
+                res.json({ 
+                    "message": "User Not Updated - No User Found for that ID",
+                    "data": ""})
+            }
+            else
+            {
+                user.findByIdAndUpdate(id, userJson, {new: true})
+                .then( (updatedRec) => {
+                    if(updatedRec == null){
+                        res.statusCode = 404;
+                        res.json({ 
+                            "message": "User Not Updated - User Not Found",
+                            "data": ""})
+                    }
+                    else{
+                        res.statusCode = 200;
+                        res.json({ 
+                            "message": "User Updated",
+                            "data": updatedRec})
+                    }
+                })
+            }
+        })
+    }
+    
+}
 //POST '/user/validate'
 //get the id and password. Validate if password is correct.
 const validate = async (req, res, next) => {
@@ -113,16 +149,24 @@ const validate = async (req, res, next) => {
 };
 
 //DELETE '/user/:name'
-const deleteOneUser = (req, res, next) => {
-    res.json({message: "DELETE 1 user"});
+const deleteOneUser = async (req, res, next) => {
+    var id = req.params.userid;
+    try {
+        out = await user.deleteOne({_id:id});
+        res.status(200).json({message:"OK",data:out});
+    } catch (error) {
+        res.status(404).json({message:"USER NOT FOUND"});
+    }
 };
 
 //export controller functions
 module.exports = {
     getAllUser, 
-    newUser,
     deleteAllUser,
+    createNewUser,
+
     getOneUser,
+    updateUser,
     validate,
     deleteOneUser
 };
