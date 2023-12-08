@@ -131,9 +131,9 @@ const validate = async (req, res, next) => {
     }
     console.log("id:" + email + ", password" + "not a good practice to print...");
     if(validUser){
-        res.status(200).json({message: "User gave a valid password", data: out});
+        res.status(200).json({message: "User gave a valid password", data: out, succes: true});
     } else {
-        res.status(404).json({message: "Invalid Password", data: null});
+        res.status(404).json({message: "Invalid Password", data: null, succes: false});
     }
 };
 
@@ -145,7 +145,7 @@ const deleteOneUser = async (req, res, next) => {
         print(out)
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
-        res.status(404).json({message:"USER NOT FOUND"});
+        res.status(404).json({message:"USER NOT FOUND", data: null});
     }
 };
 
