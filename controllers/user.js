@@ -131,9 +131,9 @@ const validate = async (req, res, next) => {
     }
     console.log("id:" + email + ", password" + "not a good practice to print...");
     if(validUser){
-        res.status(200).json({message: "User gave a valid password", data: out, succes: true});
+        res.status(200).json({message: "User gave a valid password", data: out, success: true});
     } else {
-        res.status(404).json({message: "Invalid Password", data: null, succes: false});
+        res.status(404).json({message: "Invalid Password", data: null, success: false});
     }
 };
 
