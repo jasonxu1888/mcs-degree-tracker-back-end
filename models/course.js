@@ -4,13 +4,12 @@ var mongoose = require("mongoose");
 // Define our course schema
 // no password encryption for now.
 var CourseSchema = new mongoose.Schema({
-  name: String,
-  credit: { type: Number, min: 1, max: 5 },
-  detail: String,
-  offeredTerms: Array,
-  startTime: String,
-  endTime: String,
-  daysOffered: Array,
+  name: { type: String, required: true, unique: true },
+  credit: { type: String, required: true },
+  detail: { type: String, required: true },
+  startTime: { type: String, required: true },
+  endTime: { type: String, required: true },
+  daysOffered: { type: [String], required: true },
 });
 
 // Export the Mongoose model

@@ -1,12 +1,10 @@
-const course = require("../models/course.js");
 const courseModel = require("../models/course.js");
 const userModel = require("../models/user.js");
 
 const getCourse = async (req, res) => {
   try {
-    var CRN = req.params.id;
-    console.log(CRN);
-    var course = await courseModel.findOne({ id: CRN });
+    var courseName = req.params.id;
+    var course = await courseModel.findOne({ name : courseName });
     if (course === null) {
       res.status(404).json({
         message: "Not Found",
@@ -20,7 +18,7 @@ const getCourse = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Something went wrong with getting one course.",
       data: error,
     });
   }
@@ -35,10 +33,56 @@ const getAllCourses = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Internal Server Error",
+      message: "Something went wrong with getting all courses.",
       data: error,
     });
   }
+};
+
+const deleteCourse = async (req, res) => {
+  try {
+    var courseName = req.params.id;
+    var course = await courseModel.deleteOne({ name : courseName });
+    if (course.deletedCount <= 0) {
+      res.status(500).json({
+        message: "No course found to be deleted.",
+        data: null
+      })
+    } else {
+      res.status(200).json({
+        message: "OK",
+        data: null,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+        message: "Something went wrong when deleting one course.",
+        data: error
+    })
+  }
+};
+
+const createCourse = async (req, res) => {
+    try {
+        var newCourse = new courseModel({
+            name: req.body.name,
+            credit: req.body.credit,
+            detail: req.body.detail,
+            startTime: req.body.startTime,
+            endTime: req.body.endTime,
+            daysOffered: req.body.daysOffered,
+          });
+          await newCourse.save();
+          res.status(200).json({
+            message: "OK",
+            data: null
+          })
+    } catch (error) {
+        res.status(500).json({
+            message: "Something went wrong when creating one course.",
+            data: error
+        })
+    }
 };
 
 const validateCourseSchedule = async (req, res) => {
@@ -49,6 +93,7 @@ const validateCourseSchedule = async (req, res) => {
     if (checkTimeConflict(fullSchedule[i])) {
       res.status(409).json({
         message: "Time conflicts exist within the schedule.",
+        success: false,
         data: null,
       });
       return;
@@ -60,15 +105,17 @@ const validateCourseSchedule = async (req, res) => {
   if (checkDegreeRequirements(flattenedSchedule)) {
     res.status(409).json({
       message: "Degree requirements are not met.",
+      success: false,
       data: null,
     });
     return;
   }
 
   // Valid schedule, so update user
-  // (TODO HERE)
+  var currentUser = req.body.id;
   res.status(201).json({
     message: "Course schedule is valid.",
+    success: true,
     data: fullSchedule,
   });
 };
@@ -223,16 +270,18 @@ async function checkDegreeRequirements(schedule) {
       parseInt(sep[1]) < 500 &&
       !coursesThatCanFulfillTwoCategories.has(course)
     ) {
-      breadthRequirements.add(courseToBreadthRequirement[course][0]);
+      if (course in courseToBreadthRequirement) {
+        breadthRequirements.add(courseToBreadthRequirement[course][0]);
+      }
     }
   }
 
   // Process all courses that fit within two breadth categories
   // If one of the categories already exists within the breadth requirements, then the current course can flex for the other category
   // e.g. `CS 445` is a two-category course and fulfills the `AI` and `IC` breadth requirements
-  // After processing all the single-course categories, let's say `AI` is in the fulfilled breadth requirement (from taking CS 440 for example)
+  // After processing all the single-category courses, let's say `AI` is in the fulfilled breadth requirement (from taking CS 440 for example)
   // That means CS 445 can flex to the 'IC' category, so both `AI` and `IC` are fulfilled
-  // This is why ALL single-course categories are processed, then ALL double-course categories are processed
+  // This is why ALL single-category courses are processed, then ALL double-course categories are processed
 
   for (let i = 0; i < schedule.length; i++) {
     var course = schedule[i];
@@ -260,9 +309,28 @@ async function checkDegreeRequirements(schedule) {
   return false;
 }
 
+const deleteAllCourses = async (req, res) => {
+    try {
+        _ = await courseModel.deleteMany();
+        res.status(200).json({
+            message: "OK",
+            data: null
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "Something went wrong when deleting all courses",
+            data: error
+        })
+
+    }
+}
+
 //export controller functions
 module.exports = {
   getCourse,
   getAllCourses,
   validateCourseSchedule,
+  createCourse,
+  deleteCourse,
+  deleteAllCourses
 };
