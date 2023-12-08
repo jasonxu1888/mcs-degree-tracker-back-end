@@ -7,21 +7,8 @@ const getAllUser = async (req, res, next) => {
     res.status(200).json({message:"OK",data:out});
 };
 
-function validateInputNewUser(input, err_message) {
-        try{
-            if(!(jsonbody.email && jsonbody.name)){
-                return [false, err_message + " - Email and Name are required for User Creation"]
-            }
-            return [true, jsonbody]
-        }
-        catch(err){
-            return [false, err_message + " - Invalid JSON"]
-        }
-}
-
 //POST '/user'
 const createNewUser = (req, res, next) => {
-    // [valid, userJson] = validateInputNewUser(req.body, "User Not Created")
     valid = true
     userJson = req.body
     if(!valid){
@@ -77,7 +64,8 @@ const getOneUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-    [valid, userJson] = validateInputNewUser(req.body, "User Not Updated")
+    valid = true
+    userJson = req.body
     id = req.params.userid
     if(!valid){
         res.statusCode = 400;
@@ -143,9 +131,9 @@ const validate = async (req, res, next) => {
     }
     console.log("id:" + email + ", password" + "not a good practice to print...");
     if(validUser){
-        res.status(200).json({message: "User gave a valid password"});
+        res.status(200).json({message: "User gave a valid password", data: out});
     } else {
-        res.status(404).json({message: "Invalid Password"});
+        res.status(404).json({message: "Invalid Password", data: null});
     }
 };
 
