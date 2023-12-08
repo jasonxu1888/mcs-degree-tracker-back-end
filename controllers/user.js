@@ -1,28 +1,29 @@
-const user = require("../models/user.js");
+const User = require("../models/user.js");
 
 //GET '/user'
 const getAllUser = async (req, res, next) => {
-    out = await user.find();
+    out = await User.find();
     console.log("inside get all users" + out);
     res.status(200).json({message:"OK",data:out});
 };
 
 function validateInputNewUser(input, err_message) {
-    try{
-        jsonbody = JSON.parse(input)
-        if(!(jsonbody.email && jsonbody.name)){
-            return [false, err_message + " - Email and Name are required for User Creation"]
+        try{
+            if(!(jsonbody.email && jsonbody.name)){
+                return [false, err_message + " - Email and Name are required for User Creation"]
+            }
+            return [true, jsonbody]
         }
-        return [true, jsonbody]
-    }
-    catch(err){
-        return [false, err_message + " - Invalid JSON"]
-    }
+        catch(err){
+            return [false, err_message + " - Invalid JSON"]
+        }
 }
 
 //POST '/user'
 const createNewUser = (req, res, next) => {
-    [valid, userJson] = validateInputNewUser(req.body, "User Not Created")
+    // [valid, userJson] = validateInputNewUser(req.body, "User Not Created")
+    valid = true
+    userJson = req.body
     if(!valid){
         res.statusCode = 400;
         res.json({
@@ -31,7 +32,7 @@ const createNewUser = (req, res, next) => {
         })
     }
     else{
-        user.findOne({"email":userJson.email}).then( (userSameEmail)=> 
+        User.findOne({"email":userJson.email}).then( (userSameEmail)=> 
         {
             if (userSameEmail != null) 
             {
@@ -57,7 +58,7 @@ const createNewUser = (req, res, next) => {
 
 //DELETE '/user'
 const deleteAllUser = async (req, res, next) => {
-    out = await user.deleteMany();
+    out = await User.deleteMany();
     console.log("inside delete all users");
     res.status(200).json({message:"OK",data:""});
 };
@@ -68,7 +69,7 @@ const getOneUser = async (req, res, next) => {
     var id = req.params.id;
     try {
         console.log(id);
-        out = await user.findById(id);
+        out = await User.findById(id);
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
         res.status(404).json({message:"USER NOT FOUND"});
@@ -94,7 +95,7 @@ const updateUser = async (req, res, next) => {
             })
         }
 
-        user.findById(id).then( (userObj)=> 
+        User.findById(id).then( (userObj)=> 
         {
             if (userObj == null) 
             {
@@ -105,7 +106,7 @@ const updateUser = async (req, res, next) => {
             }
             else
             {
-                user.findByIdAndUpdate(id, userJson, {new: true})
+                User.findByIdAndUpdate(id, userJson, {new: true})
                 .then( (updatedRec) => {
                     if(updatedRec == null){
                         res.statusCode = 404;
@@ -132,7 +133,7 @@ const validate = async (req, res, next) => {
     console.log("id:" + id);
     var validUser = false;
     try {
-        out = await user.findOne({email:id});
+        out = await User.findOne({email:id});
         if(out.password == password){
             validUser = true;
         } 
@@ -152,7 +153,7 @@ const validate = async (req, res, next) => {
 const deleteOneUser = async (req, res, next) => {
     var id = req.params.id;
     try {
-        out = await user.deleteOne({_id:id});
+        out = await User.deleteOne({_id:id});
         print(out)
         res.status(200).json({message:"OK",data:out});
     } catch (error) {
