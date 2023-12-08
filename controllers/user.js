@@ -128,12 +128,12 @@ const updateUser = async (req, res, next) => {
 }
 //get the id and password. Validate if password is correct.
 const validate = async (req, res, next) => {
-    var id = req.body.id;
+    var email = req.body.email;
     var password = req.body.password;
-    console.log("id:" + id);
+    console.log("Email:" + email);
     var validUser = false;
     try {
-        out = await User.findOne({email:id});
+        out = await User.findOne({email:email});
         if(out.password == password){
             validUser = true;
         } 
@@ -141,7 +141,7 @@ const validate = async (req, res, next) => {
     } catch (error){
         console.log(error);
     }
-    console.log("id:" + id + ", password" + "not a good practice to print...");
+    console.log("id:" + email + ", password" + "not a good practice to print...");
     if(validUser){
         res.status(200).json({message: "User gave a valid password"});
     } else {
