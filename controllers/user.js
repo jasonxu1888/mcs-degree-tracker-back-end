@@ -14,6 +14,7 @@ const createNewUser = (req, res, next) => {
     if(!valid){
         res.statusCode = 400;
         res.json({
+            "success": false,
             "message": userJson,
             "data": ""
         })
@@ -25,6 +26,7 @@ const createNewUser = (req, res, next) => {
             {
                 res.statusCode = 400;
                 res.json({ 
+                    "success": false,
                     "message": "User Not Created - Email Already Linked to another User",
                     "data": ""})
             }
@@ -35,6 +37,7 @@ const createNewUser = (req, res, next) => {
                 .then( (savedRec) => {
                     res.statusCode = 201;
                     res.json({ 
+                        "success": true,
                         "message": "User Created",
                         "data": savedRec})
                     })
