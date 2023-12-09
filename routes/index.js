@@ -17,8 +17,9 @@ router.post("/users/validate", userController.validate);
 router.get("/courses/:id", courseController.getCourse);
 router.get("/courses", courseController.getAllCourses);
 router.post("/courses/validate", courseController.validateCourseSchedule);
-router.post("/courses", courseController.createCourse)
-router.delete("/courses/:id", courseController.deleteCourse)
-router.delete("/delete/courses/all", courseController.deleteAllCourses)
+router.post("/courses", courseController.createCourse);
+router.delete("/courses/:id", courseController.deleteCourse);
+router.delete("/delete/courses/all", courseController.deleteAllCourses);
+router.put("/courses/:id", courseController.updateCourseName);
 
 module.exports = router;

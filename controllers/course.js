@@ -4,7 +4,7 @@ const userModel = require("../models/user.js");
 const getCourse = async (req, res) => {
   try {
     var courseName = req.params.id;
-    var course = await courseModel.findOne({ name : courseName });
+    var course = await courseModel.findOne({ name: courseName });
     if (course === null) {
       res.status(404).json({
         message: "Not Found",
@@ -42,12 +42,12 @@ const getAllCourses = async (req, res) => {
 const deleteCourse = async (req, res) => {
   try {
     var courseName = req.params.id;
-    var course = await courseModel.deleteOne({ name : courseName });
+    var course = await courseModel.deleteOne({ name: courseName });
     if (course.deletedCount <= 0) {
       res.status(500).json({
         message: "No course found to be deleted.",
-        data: null
-      })
+        data: null,
+      });
     } else {
       res.status(200).json({
         message: "OK",
@@ -56,33 +56,33 @@ const deleteCourse = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({
-        message: "Something went wrong when deleting one course.",
-        data: error
-    })
+      message: "Something went wrong when deleting one course.",
+      data: error,
+    });
   }
 };
 
 const createCourse = async (req, res) => {
-    try {
-        var newCourse = new courseModel({
-            name: req.body.name,
-            credit: req.body.credit,
-            detail: req.body.detail,
-            startTime: req.body.startTime,
-            endTime: req.body.endTime,
-            daysOffered: req.body.daysOffered,
-          });
-          await newCourse.save();
-          res.status(200).json({
-            message: "OK",
-            data: null
-          })
-    } catch (error) {
-        res.status(500).json({
-            message: "Something went wrong when creating one course.",
-            data: error
-        })
-    }
+  try {
+    var newCourse = new courseModel({
+      name: req.body.name,
+      credit: req.body.credit,
+      detail: req.body.detail,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
+      daysOffered: req.body.daysOffered,
+    });
+    await newCourse.save();
+    res.status(200).json({
+      message: "OK",
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong when creating one course.",
+      data: error,
+    });
+  }
 };
 
 const validateCourseSchedule = async (req, res) => {
@@ -310,20 +310,46 @@ async function checkDegreeRequirements(schedule) {
 }
 
 const deleteAllCourses = async (req, res) => {
-    try {
-        _ = await courseModel.deleteMany();
-        res.status(200).json({
-            message: "OK",
-            data: null
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: "Something went wrong when deleting all courses",
-            data: error
-        })
+  try {
+    _ = await courseModel.deleteMany();
+    res.status(200).json({
+      message: "OK",
+      data: null,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong when deleting all courses.",
+      data: error,
+    });
+  }
+};
 
+const updateCourseName = async (req, res) => {
+  try {
+    var courseName = req.params.id;
+    var changedName = req.body.name;
+    var course = await courseModel.findOneAndUpdate(
+      { name: courseName },
+      { $set: { name: changedName } }
+    );
+    if (course === null) {
+      res.status(404).json({
+        message: "No course found to be updated.",
+        data: null,
+      });
+    } else {
+      res.status(200).json({
+        message: "OK",
+        data: null,
+      });
     }
-}
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong updating a course name.",
+      data: error,
+    });
+  }
+};
 
 //export controller functions
 module.exports = {
@@ -332,5 +358,6 @@ module.exports = {
   validateCourseSchedule,
   createCourse,
   deleteCourse,
-  deleteAllCourses
+  deleteAllCourses,
+  updateCourseName,
 };
