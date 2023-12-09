@@ -11,6 +11,7 @@ const getAllUser = async (req, res, next) => {
 const createNewUser = (req, res, next) => {
     valid = true
     userJson = req.body
+    console.log(userJson);
     if(!valid){
         res.statusCode = 400;
         res.json({

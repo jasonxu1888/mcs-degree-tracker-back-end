@@ -1,2 +1,2 @@
-TomCruise|Tom|Cruise|2025|mcs001|active|[{"courseId": "123","year": 2024, "term": "fall","grade": 4 }, { "courseId": "124", "year": 2024, "term": "fall", "grade": 4 }]
-Sharukh|Sharukh|Khan|2025|mcs001|active|[{"courseId": "223","year": 2024, "term": "fall","grade": 4 }, { "courseId": "223", "year": 2024, "term": "fall", "grade": 4 }]
+Tom|Cruise|tom.cruise@gmail.com|tom1|2024|MCS|111, 112
+Sharukh|Khan|shah@gmail.com|shah1|2024|MCS|111, 114
