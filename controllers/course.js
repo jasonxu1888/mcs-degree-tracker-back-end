@@ -90,7 +90,7 @@ const validateCourseSchedule = async (req, res) => {
 
   // Check time conflicts for each semester
   for (var i = 0; i < fullSchedule.length; i++) {
-    if (await checkTimeConflict(fullSchedule[i]) === true) {
+    if ((await checkTimeConflict(fullSchedule[i])) === true) {
       res.status(409).json({
         message: "Time conflicts exist within the schedule.",
         success: false,
@@ -102,7 +102,7 @@ const validateCourseSchedule = async (req, res) => {
 
   // Check degree requirements
   var flattenedSchedule = fullSchedule.flat(Infinity);
-  if (await checkDegreeRequirements(flattenedSchedule) === true) {
+  if ((await checkDegreeRequirements(flattenedSchedule)) === true) {
     res.status(409).json({
       message: "Degree requirements are not met.",
       success: false,
@@ -111,8 +111,7 @@ const validateCourseSchedule = async (req, res) => {
     return;
   }
 
-  // Valid schedule, so update user
-  var currentUser = req.body.id;
+  // Valid schedule, so update user (TODO)
   res.status(201).json({
     message: "Course schedule is valid.",
     success: true,
@@ -125,7 +124,9 @@ const validateCourseSchedule = async (req, res) => {
 async function checkTimeConflict(semesterSchedule) {
   var scheduleDetails = [];
   for (let i = 0; i < semesterSchedule.length; i++) {
-    scheduleDetails.push(await courseModel.findOne({ name: semesterSchedule[i] }));
+    scheduleDetails.push(
+      await courseModel.findOne({ name: semesterSchedule[i] })
+    );
   }
   var daysOfWeek = ["M", "T", "W", "R", "F"];
   for (let i = 0; i < daysOfWeek.length; i++) {
@@ -155,7 +156,13 @@ async function checkTimeConflict(semesterSchedule) {
 
 // Making two dictionaries (breadth mapped to courses, and courses mapped to breadth) for validation checks
 var breadthRequirementToCourse = {
-  ACPC: ["CS 426", "CS 431 Embedded Systems", "CS 433 Computer System Organization", "CS 483 Applied Parallel Programming", "CS 484 Parallel Programming"],
+  ACPC: [
+    "CS 426",
+    "CS 431 Embedded Systems",
+    "CS 433 Computer System Organization",
+    "CS 483 Applied Parallel Programming",
+    "CS 484 Parallel Programming",
+  ],
   AI: [
     "CS 440 Artificial Intelligence",
     "CS 441 Applied Machine Learning",
@@ -169,7 +176,12 @@ var breadthRequirementToCourse = {
   ],
   BCB: ["CS 466"],
   CE: [],
-  DIS: ["CS 410 Text Information Systems", "CS 411 Database Systems", "CS 412 Introduction to Data Mining", "CS 470"],
+  DIS: [
+    "CS 410 Text Information Systems",
+    "CS 411 Database Systems",
+    "CS 412 Introduction to Data Mining",
+    "CS 470",
+  ],
   IC: [
     "CS 409",
     "CS 415 Game Development",
@@ -243,7 +255,7 @@ async function checkDegreeRequirements(schedule) {
 
   // Check # >= 500 requirements
   var advancedRequirements = 3;
-  for (let i = 0; i < schedule.size; i++) {
+  for (let i = 0; i < schedule.length; i++) {
     var sep = schedule[i].split(" ");
     if (parseInt(sep[1]) >= 500) {
       advancedRequirements -= 1;
@@ -294,15 +306,14 @@ async function checkDegreeRequirements(schedule) {
       var secondCategory = courseToBreadthRequirement[course][1];
       if (breadthRequirements.has(firstCategory)) {
         breadthRequirements.add(secondCategory);
-      } else if (breadth.has(secondCategory)) {
+      } else if (breadthRequirements.has(secondCategory)) {
         breadthRequirements.add(firstCategory);
       } else {
         breadthRequirements.add(firstCategory);
       }
     }
   }
-
-  if (breadth.size < 4) {
+  if (breadthRequirements.size < 4) {
     return true;
   }
 
