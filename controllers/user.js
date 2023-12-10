@@ -69,7 +69,7 @@ const getOneUser = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
     valid = true
     userJson = req.body
-    id = req.params.userid
+    id = req.params.id
     if(!valid){
         res.statusCode = 400;
         res.json({
