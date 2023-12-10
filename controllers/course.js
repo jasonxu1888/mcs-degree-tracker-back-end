@@ -111,7 +111,6 @@ const validateCourseSchedule = async (req, res) => {
     return;
   }
 
-  // Valid schedule, so update user (TODO)
   res.status(201).json({
     message: "Course schedule is valid.",
     success: true,
