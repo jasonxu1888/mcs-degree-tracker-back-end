@@ -16,7 +16,7 @@ router.post("/users/validate", userController.validate);
 // Course Routes
 router.get("/courses/:id", courseController.getCourse);
 router.get("/courses", courseController.getAllCourses);
-router.post("/courses/validate", courseController.validateCourseSchedule);
+router.post("/validate", courseController.validateCourseSchedule);
 router.post("/courses", courseController.createCourse);
 router.delete("/courses/:id", courseController.deleteCourse);
 router.delete("/delete/courses/all", courseController.deleteAllCourses);

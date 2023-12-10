@@ -86,11 +86,11 @@ const createCourse = async (req, res) => {
 };
 
 const validateCourseSchedule = async (req, res) => {
-  var fullSchedule = JSON.parse(req.body.schedule);
+  var fullSchedule = req.body.schedule;
 
   // Check time conflicts for each semester
   for (var i = 0; i < fullSchedule.length; i++) {
-    if (checkTimeConflict(fullSchedule[i])) {
+    if (await checkTimeConflict(fullSchedule[i]) === true) {
       res.status(409).json({
         message: "Time conflicts exist within the schedule.",
         success: false,
@@ -102,7 +102,7 @@ const validateCourseSchedule = async (req, res) => {
 
   // Check degree requirements
   var flattenedSchedule = fullSchedule.flat(Infinity);
-  if (checkDegreeRequirements(flattenedSchedule)) {
+  if (await checkDegreeRequirements(flattenedSchedule) === true) {
     res.status(409).json({
       message: "Degree requirements are not met.",
       success: false,
@@ -125,17 +125,17 @@ const validateCourseSchedule = async (req, res) => {
 async function checkTimeConflict(semesterSchedule) {
   var scheduleDetails = [];
   for (let i = 0; i < semesterSchedule.length; i++) {
-    scheduleDetails.push(await courseModel.find({ id: semesterSchedule[i] }));
+    scheduleDetails.push(await courseModel.findOne({ name: semesterSchedule[i] }));
   }
   var daysOfWeek = ["M", "T", "W", "R", "F"];
   for (let i = 0; i < daysOfWeek.length; i++) {
     var currentDay = daysOfWeek[i];
     var courseShareDay = [];
     for (let j = 0; j < scheduleDetails.length; j++) {
-      if (scheduleDetails[i].daysOffered.includes(currentDay)) {
+      if (scheduleDetails[j].daysOffered.includes(currentDay)) {
         courseShareDay.push([
-          scheduleDetails[i].startTime,
-          scheduleDetails[i].endTime,
+          scheduleDetails[j].startTime,
+          scheduleDetails[j].endTime,
         ]);
       }
     }
